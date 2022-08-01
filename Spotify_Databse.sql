@@ -29,6 +29,7 @@ create table Users_(user_id int primary key, user_name varchar(200), user_email 
    
 
 select * from Playlists_;
+select *from Users_;
 
 select user_id, user_name from Users_;
 
