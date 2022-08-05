@@ -7,7 +7,8 @@ use Spotify1;
 create table Users_(user_id int primary key, user_name varchar(200), user_email varchar(200),
 	user_pswrd varchar(200));
     
-    
+   select user_id from Users_ where user_id = 1001;
+   
     desc Users_;
     
     create table  Playlists_(p_id int primary key, p_name varchar (200), p_desc varchar (200), user_id int ,
@@ -27,9 +28,9 @@ create table Users_(user_id int primary key, user_name varchar(200), user_email 
    insert into Playlists_ values(16, 'Playlist3' , 'afternoon favourite' , 1003);
    insert into Playlists_ values(17, 'Playlist4' , 'Playlist favourite ', 1001);
    
-
+SELECT * from tracks;
 select * from Playlists_;
-select *from Users_;
+select * from Users_;
 
 select user_id, user_name from Users_;
 
@@ -42,13 +43,13 @@ group by user_id;
 
 select * from Users_ where user_id = 1003; 
 
-select * from Users_ where user_id = 1003 or user_name= 'akshay';
+select * from Users_ where user_id = 1003 or user_name= 'harshal';
 
 SELECT * FROM Users_
- WHERE user_id  IN(SELECT user_id FROM Users_ WHERE user_id > 1001);
+ WHERE user_id  IN(SELECT user_id FROM Users_ WHERE user_id > 1002);
  
  SELECT * FROM Users_
- WHERE user_id  NOT IN(SELECT user_id FROM Users_ WHERE user_id < 1001);
+ WHERE user_id  NOT IN(SELECT user_id FROM Users_ WHERE user_id = 1001);
  
  use joinspotify;
  
@@ -57,8 +58,10 @@ show tables;
 select * from Users_ join  Playlists_ on 
 Users_.user_id = Playlists_.user_id;
 
+
 select * from Users_ inner join  Playlists_ on 
 Users_.user_id = Playlists_.user_id;
+
 
 select * from Users_ cross join  Playlists_ ;
  
@@ -82,16 +85,19 @@ SELECT * from tracks;
  SELECT tracks.track_name FROM tracks 
        INNER JOIN Playlists_ 
        ON Playlists_.p_id = tracks.p_id;
-       
- SELECT tracks.track_name, Playlists_.p_id 
-FROM ((tracks INNER JOIN Playlists_ ON Playlists_.p_id = tracks.p_id)
-INNER JOIN Users_ ON Users_.user_id = Playlists_.user_id);      
+        
+ SELECT * FROM Playlists_ 
+ left JOIN Users_ ON Users_.user_id = Playlists_.user_id;      
  
+
   SELECT tracks.track_name, Users_.user_id 
 FROM ((tracks INNER JOIN Playlists_ ON Playlists_.p_id = tracks.p_id)
 INNER JOIN Users_ ON Users_.user_id = Playlists_.user_id);
 
- SELECT tracks.track_id, Users_.user_id 
+select * from Users_  join Playlists_ on Playlists_.user_id = Users_.user_id 
+	join tracks on  Playlists_.p_id = tracks.p_id;
+
+ SELECT tracks.track_id, Users_.user_id
 FROM ((tracks INNER JOIN Playlists_ ON Playlists_.p_id = tracks.p_id)
 INNER JOIN Users_ ON Users_.user_id = Playlists_.user_id);      
 
@@ -99,4 +105,25 @@ INNER JOIN Users_ ON Users_.user_id = Playlists_.user_id);
 SELECT Users_ .user_name, Playlists_ .p_name
 FROM Users_
 CROSS JOIN Playlists_;
+
+
+
+	DELIMITER |
+	CREATE FUNCTION userId (user_id int)
+		RETURNS VARCHAR(10)
+			DETERMINISTIC
+				BEGIN
+					DECLARE result_value VARCHAR(3);
+						IF  user_id = 1001
+							THEN SET result_value = 'Yes';
+						ELSEIF user_id <= user_id 
+							THEN SET result_value = 'No';
+						END IF;    
+					RETURN result_value;
+				END|
+
+select user_id, userId(user_id) from Users_;
+
+        
+        
 	
